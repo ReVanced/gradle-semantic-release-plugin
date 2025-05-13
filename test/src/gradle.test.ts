@@ -16,12 +16,12 @@ describe("Test for gradle handling", function () {
   jest.setTimeout(60000);
   describe("getCommand()", () => {
     it("returns 'gradle' when there is no gradle wrapper", async () => {
-      const command = await getCommand(cwd());
+      const command = await getCommand(cwd(), process.env);
       expect(command).toBe("gradle");
     });
     it("finds the wrapper script", async () => {
       const gradleProject = join(cwd(), "test/project/without-plugin");
-      const command = await getCommand(gradleProject);
+      const command = await getCommand(gradleProject, process.env);
       expect(command).toBe("./gradlew");
     });
   });

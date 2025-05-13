@@ -7,6 +7,20 @@ Yet another gradle-semantic-release-plugin that invokes Gradle wrapper script to
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 
+# About this fork
+
+This repository is a fork of [gradle-semantic-release-plugin](https://github.com/KengoTODA/gradle-semantic-release-plugin) to make it practically work with [multi-semantic-release](https://github.com/anolilab/semantic-release/blob/main/packages/multi-semantic-release/README.md). Specifically, it allows specifying the Gradle binary path (Useful when the plugin is ran in a Gradle module as a root directory) using the environment variable `GRADLE_BIN` (Useful when the plugin is ran in a Gradle module as a root directory).
+
+Goals of this fork:
+
+- Feature parity with upstream
+- Support multi-semantic-release
+
+Nongoals of this fork:
+
+- New features that do not contribute to the goal of this fork
+- Bug fixes that do not contribute to the goal of this fork
+
 # Precondition
 
 To apply this semantic-release plugin, you need to fulfill the following preconditions:

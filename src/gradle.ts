@@ -16,9 +16,14 @@ const ERROR_MULTIPLE_PLUGIN = "Found multiple tasks to publish";
  * @param {string} cwd the path of current working directory
  * @return A promise that resolves name of command to trigger Gradle
  */
-export function getCommand(cwd: string): Promise<string> {
+export function getCommand(
+  cwd: string,
+  env: NodeJS.ProcessEnv,
+): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    access(join(cwd, "gradlew"), constants.F_OK, (err) => {
+    const GRADLE_BIN = env["GRADLE_BIN"] || "./gradlew";
+
+    access(join(cwd, GRADLE_BIN), constants.F_OK, (err) => {
       if (err) {
         if (err.code === "ENOENT") {
           resolve("gradle");
@@ -26,7 +31,7 @@ export function getCommand(cwd: string): Promise<string> {
           reject(err);
         }
       } else {
-        resolve("./gradlew");
+        resolve(GRADLE_BIN);
       }
     });
   });
@@ -42,7 +47,7 @@ export function getTaskToPublish(
   logger: Signale,
 ): Promise<string[]> {
   return new Promise(async (resolve, reject) => {
-    const command = await getCommand(cwd);
+    const command = await getCommand(cwd, env);
     const child = spawn(command, ["tasks", "-q"], {
       cwd,
       env,
@@ -85,7 +90,11 @@ export function getTaskToPublish(
           ) {
             reject(new Error(ERROR_MULTIPLE_PLUGIN));
           }
-          if (tasks.length != 0 && (tasks[0] === "artifactoryDeploy" || tasks[0] === "artifactoryPublish")) {
+          if (
+            tasks.length != 0 &&
+            (tasks[0] === "artifactoryDeploy" ||
+              tasks[0] === "artifactoryPublish")
+          ) {
             logger.info(INFO_ARTIFACTORY);
           } else if (tasks.length != 0 && tasks[0] === "publishPlugins") {
             logger.info(INFO_PUBLISH_PLUGINS);
@@ -149,7 +158,7 @@ export function getVersion(
   env: NodeJS.ProcessEnv,
 ): Promise<string> {
   return new Promise(async (resolve, reject) => {
-    const command = await getCommand(cwd);
+    const command = await getCommand(cwd, env);
     const child = spawn(command, ["properties", "-q"], {
       cwd,
       env,
@@ -200,7 +209,7 @@ export function publishArtifact(
   logger: Signale,
 ) {
   return new Promise(async (resolve, reject) => {
-    const command = getCommand(cwd);
+    const command = getCommand(cwd, env);
     const task = await getTaskToPublish(cwd, env, logger);
     const options = [...task, "-q"].concat(buildOptions(env));
     logger.info(`launching child process with options: ${options.join(" ")}`);

@@ -6,7 +6,7 @@ module.exports = async function verifyConditions(
   context: IContext,
 ) {
   const { cwd, env, logger } = context;
-  const command = await getCommand(cwd);
+  const command = await getCommand(cwd, env as NodeJS.ProcessEnv);
   if (command !== "./gradlew") {
     throw new Error(`Gradle wrapper not found at ${cwd}`);
   }
