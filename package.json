@@ -1,12 +1,12 @@
 {
-  "name": "gradle-semantic-release-plugin",
+  "name": "@revanced/gradle-semantic-release-plugin",
   "version": "1.10.1",
   "description": "Automated release management for Gradle project",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/KengoTODA/gradle-semantic-release-plugin.git"
+    "url": "https://github.com/revanced/gradle-semantic-release-plugin.git"
   },
   "keywords": [
     "semantic-release",
@@ -75,6 +75,7 @@
     ]
   },
   "publishConfig": {
+    "@revanced:registry": "https://npm.pkg.github.com",
     "access": "public"
   },
   "lint-staged": {
